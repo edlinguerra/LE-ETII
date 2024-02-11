@@ -86,6 +86,17 @@ levels(factor(datos$Comments))
 
 #variable 18 years (Recien fabricada)
 
+ano <- year(datos_filtrados$Date.Egg)
+
+datos_filtrados$Date.Egg <- ymd(datos_filtrados$Date.Egg)
+
+datos_filtrados <- datos_filtrados |> 
+  mutate(ano = year (Date.Egg))
+
+#Se añadio una columna al final donde estuviera el año de muestreo 
+#de cada pingüino
+
+
 #Cambios adicionales en los datos 
 
 datos_filtrados1 <- datos %>%
@@ -97,14 +108,6 @@ datos_filtrados <- datos %>%
 #Los datos que no contenian la información de sexo 
 #no tenian dos o mas apartados extra, por los que se opto por eliminarlos. 
 
-ano <- year(datos_filtrados$Date.Egg)
-
-datos_filtrados$Date.Egg <- ymd(datos_filtrados$Date.Egg)
-
-datos_filtrados <- datos_filtrados |> 
-  mutate(ano = year (Date.Egg))
-#Se añadio una columna al final donde estuviera el año de muestreo 
-#de cada pingüino
 
 #variable Species 
 CC <- table(datos_filtrados$Species)
