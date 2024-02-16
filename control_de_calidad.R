@@ -33,15 +33,15 @@ View(datos)
 
 #Variable 4 Region
  levels(factor(datos$Region))
-  #Verificado sin errores
+  #Se aprecian una región, sin errores
  
 #Variable 5 Island
  levels(factor(datos$Island))
- #Verificado sin errores
+ #Se aprecian tres islas, sin errores
 
 #Variable 6 Stage
  levels(factor(datos$Stage))
- #Verificado sin errores
+ #Se aprecia un solo valor para la variable, sin errores
  
 #Variable 7 Individual ID
  datos$'Individual ID'
