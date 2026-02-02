@@ -49,11 +49,11 @@ Este es un ejercicio práctico sobre **control de versiones** aplicado al **cont
 
 ### 3) Crear tu rama personal de trabajo
 
-En RStudio, ubica :
+En RStudio, ubica el panel con la pestaña `Git`, y en la esquina derecha selecciona New Branch. Nómbralo con tu nombre y apellido sin espacios.
 
 ---
 
-### 4) Crear tus archivos personales
+### 4) Crear tus archivos personales desde tu rama
 
 1. **Verifica las carpetas necesarias**:
    - `codigos/`
@@ -147,7 +147,7 @@ En GitHub:
 
 ### 9) Revisión y aprobación
 
-Yo revisaré tu PR con una lista de cotejo. Se aprobará si:
+Yo revisaré tu Pull Request (PR) con una lista de cotejo. Se aprobará si:
 
 - No modificaste el dataset crudo.
 - Incluiste los **3 archivos requeridos** con tu usuario.
