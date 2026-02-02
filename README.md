@@ -62,10 +62,10 @@ En RStudio, ubica el panel con la pestaña `Git`, y en la esquina derecha selecc
    - `datos/curados/`
 
 2. **Crea tu script de control de calidad (QC)**:
-   - Archivo: `codigos/qc_<tu_usuario>.R`
+   - Archivo: `codigos/QC_<tu_usuario>.R`
 
 3. **Crea tu reporte breve** (Markdown o Quarto):
-   - Archivo `reports/qc_<tu_usuario>.qmd`
+   - Archivo `reports/QC_<tu_usuario>.qmd`
 
 4. **Tu dataset limpio (output)** se generará al correr tu script y debe guardarse:
    - Archivo: `datos/curados/datos_r<ABC>.csv`
@@ -74,7 +74,7 @@ En RStudio, ubica el panel con la pestaña `Git`, y en la esquina derecha selecc
 
 ### 5) Qué debe incluir tu QC (mínimos esperados)
 
-En tu script `codigos/qc_<tu_usuario>.R` debes:
+En tu script `codigos/QC_<tu_usuario>.R` debes:
 
 - Leer datos **desde el archivo crudo** (sin editarlo).
 - Aplicar control de calidad usando `tidyverse`:
@@ -85,13 +85,13 @@ En tu script `codigos/qc_<tu_usuario>.R` debes:
 - Guardar tu dataset limpio en:
   - `datos/curados/datos_r<ABC>.csv`
 
-En tu reporte `reportes/qc_<tu_usuario>.qmd` incluye:
+En tu reporte `reportes/exploracion_<tu_usuario>.qmd` incluye:
 
 - **5–10 viñetas** con:
   - Principales problemas detectados
   - Cambios aplicados (y por qué)
   - Qué NO corregiste (y por qué)
-  - Cómo reproducir tu resultado (ej. “correr `R/qc_<tu_usuario>.R`”)
+  - Cómo reproducir tu resultado
 
 ---
 
@@ -101,7 +101,7 @@ En RStudio, pestaña **Git**:
 
 1. Marca (stage) los archivos que creaste/modificaste y luego presiona `commit`:
 
-2. Escribe un mensaje de commit descriptivo
+2. Escribe un mensaje de commit descriptivo de los que representa el cambio
 
 3. Haz clic en **Commit**.
 
@@ -120,26 +120,20 @@ En RStudio (pestaña **Git**) haz clic en **Push**.
 En GitHub:
 
 1. Entra al repositorio principal.
-2. Si aparece el aviso “`qc/<tu_usuario>` had recent pushes”, haz clic en **Compare & pull request**.  
-   (Si no aparece: ve a **Pull requests > New pull request**.)
-
+2. Si aparece el aviso, haz clic en **Compare & pull request**. Si no aparece, ve a **Pull requests > New pull request**.
 3. Configura:
-   - **Base:** `main`
+   - **Base:** `main` 
    - **Compare:** `qc/<tu_usuario>`
 
 4. En la descripción del PR pega y completa:
 
 **Descripción del PR**
 - Usuario: `<tu_usuario>`
-- Archivos entregados: `qc_<tu_usuario>.R`, `qc_<tu_usuario>.md/.qmd`, `<tu_usuario>_clean.csv`
-- Problemas encontrados:
-  - …
-- Cambios aplicados:
-  - …
-- Pendientes / decisiones:
-  - …
-- Reproducibilidad:
-  - Ejecutar `R/qc_<tu_usuario>.R`
+- Archivos entregados
+- Problemas encontrados
+- Cambios aplicados
+- Pendientes / decisiones
+- Reproducibilidad
 
 5. Haz clic en **Create pull request**.
 
@@ -163,4 +157,4 @@ Si aparece algún error (no aparece la pestaña Git, no deja hacer push, credenc
 
 
 
-Prof. Edlin José Guerra Castro
+**Prof. Edlin José Guerra Castro**
