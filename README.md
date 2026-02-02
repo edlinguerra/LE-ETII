@@ -129,15 +129,11 @@ En GitHub:
 
 **Descripción del PR**
 - Usuario: `<tu_usuario>`
-- Archivos entregados: `qc_<tu_usuario>.R`, `qc_<tu_usuario>.md/.qmd`, `<tu_usuario>_clean.csv`
-- Problemas encontrados:
-  - …
-- Cambios aplicados:
-  - …
-- Pendientes / decisiones:
-  - …
-- Reproducibilidad:
-  - Ejecutar `R/qc_<tu_usuario>.R`
+- Archivos entregados
+- Problemas encontrados
+- Cambios aplicados
+- Pendientes / decisiones
+- Reproducibilidad
 
 5. Haz clic en **Create pull request**.
 
