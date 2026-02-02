@@ -1,37 +1,166 @@
-<img src="./images/ENES_Merida.jpg" width="25%">
+<img src="./imagenes/ENES_Merida.jpg" width="25%">
 
-# Ecología Teórica II
+# Ecología Teórica II — Ecoinformática  
+## Ejercicio: Git + GitHub + RStudio para control de calidad de datos ecológicos
 
-## Ecoinformática
+Este es un ejercicio práctico sobre **control de versiones** aplicado al **control de calidad (QC)** y exploración de datos ecológicos usando **GitHub** y **RStudio**.
 
-Este es un ejercicio práctico sobre control de versiones al análisis de control de calidad y exploración de datos ecológicos con **GitHub** y **RStudio**. Lo que deben hacer paso a paso es:
+---
 
-1. **Hacer Fork del Repositorio Principal**:
-   - Dirígete al repositorio principal en GitHub y haz clic en el botón "Fork" en la esquina superior derecha para crear una copia del repositorio en tu cuenta de GitHub.
+## Objetivo
 
-2. **Clonar el Repositorio Forkeado**:
-   - Navega a tu repositorio forkeado en GitHub y copia la URL del repositorio (usualmente termina en `.git`).
-   - Abre RStudio, selecciona "File" > "New Project" > "Version Control" > "Git" e ingresa la URL del repositorio forkeado para clonarlo en tu máquina local.
+- Practicar el flujo colaborativo real: **clonar → crear rama → trabajar en archivos propios → commit → push → pull request**.
+- Evitar conflictos: **cada estudiante trabajará en archivos propios** y **no se modificará la base de datos original**.
 
-3. **Conectar el Proyecto en RStudio**:
-   - Abre el proyecto clonado en RStudio y asegúrate de que todos los archivos necesarios estén presentes.
+---
 
-4. **Modificar la Base de Datos**:
-   - Realiza las modificaciones necesarias en la base de datos del repositorio utilizando RStudio.
+## Reglas del ejercicio (muy importantes)
 
-5. **Hacer Commit de los Cambios**:
-   - En RStudio, usa la pestaña "Git" para seleccionar los archivos modificados, escribe un mensaje de commit descriptivo y haz clic en "Commit".
+1. **NO modificar** el archivo de datos original (`datos/original/datos.csv`).
+2. Tu contribución debe quedar en `datos/curado/datos_r<ABC>.csv` siedno `r` indicador de revisado y `ABC` las iniciales de tu nombre, para que sea independiente y no genere conflictos en este ejercicio (p.ej. el mio es datos_rEGC.csv).
+3. Tu entrega debe incluir **estos 3 archivos** (con tu usuario):
 
-6. **Hacer Push de los Cambios**:
-   - Después de hacer commit, haz push de los cambios a tu repositorio forkeado en GitHub utilizando la pestaña "Git" en RStudio y haciendo clic en "Push".
+   - `codigos/qc_<tu_usuario>.R` → tu script de control de calidad  
+   - `reportes/qc_<tu_usuario>.qmd` → tu reporte breve  
+   - `datos/curados/datos_r<ABC>.csv` → tu versión limpia del dataset
 
-7. **Crear un Pull Request**:
-   - Navega a tu repositorio forkeado en GitHub y haz clic en "New Pull Request". Selecciona la rama principal del repositorio original como destino y la rama de tu repositorio forkeado como origen.
-   - Escribe una descripción clara de los cambios realizados y envía el pull request.
+---
 
-8. **Revisión y Aprobación**:
-   - Yo revisaré el pull request y, si todo está en orden, aprobaré los cambios.
+## Instrucciones paso a paso
 
-Éxito!
+### 1) Clonar el repositorio principal
+
+1. Ve al repositorio principal en GitHub (el que les compartí).
+2. Copia la URL del repositorio (HTTPS).
+3. En RStudio:
+   - **File > New Project > Version Control > Git**
+   - Pega la URL del repositorio
+   - Elige una carpeta local
+   - Clic en **Create Project**
+
+---
+
+### 2) Verificar que Git esté funcionando en RStudio
+
+- Abre el proyecto y revisa que exista la pestaña **Git**.
+- Si no aparece, **detente y avísame** antes de seguir.
+
+---
+
+### 3) Crear tu rama personal de trabajo
+
+En RStudio, ubica :
+
+---
+
+### 4) Crear tus archivos personales
+
+1. **Verifica las carpetas necesarias**:
+   - `codigos/`
+   - `reportes/`
+   - `datos/original/`
+   - `datos/curados/`
+
+2. **Crea tu script de control de calidad (QC)**:
+   - Archivo: `codigos/qc_<tu_usuario>.R`
+
+3. **Crea tu reporte breve** (Markdown o Quarto):
+   - Archivo `reports/qc_<tu_usuario>.qmd`
+
+4. **Tu dataset limpio (output)** se generará al correr tu script y debe guardarse:
+   - Archivo: `datos/curados/datos_r<ABC>.csv`
+
+---
+
+### 5) Qué debe incluir tu QC (mínimos esperados)
+
+En tu script `codigos/qc_<tu_usuario>.R` debes:
+
+- Leer datos **desde el archivo crudo** (sin editarlo).
+- Aplicar control de calidad usando `tidyverse`:
+  - Revisión de tipos de datos (numérico, fecha, texto/categorías)
+  - Valores faltantes (NA): cuántos hay y qué decisión tomar con ellos (documentar)
+  - Homogenizar nombres de especies y corregirlos desde R
+  - Crar una columna para año a partir de la columna de fechas
+- Guardar tu dataset limpio en:
+  - `datos/curados/datos_r<ABC>.csv`
+
+En tu reporte `reportes/qc_<tu_usuario>.qmd` incluye:
+
+- **5–10 viñetas** con:
+  - Principales problemas detectados
+  - Cambios aplicados (y por qué)
+  - Qué NO corregiste (y por qué)
+  - Cómo reproducir tu resultado (ej. “correr `R/qc_<tu_usuario>.R`”)
+
+---
+
+### 6) Commit de tus cambios
+
+En RStudio, pestaña **Git**:
+
+1. Marca (stage) los archivos que creaste/modificaste y luego presiona `commit`:
+
+2. Escribe un mensaje de commit descriptivo
+
+3. Haz clic en **Commit**.
+
+---
+
+### 7) Push de tu rama a GitHub
+
+En RStudio (pestaña **Git**) haz clic en **Push**.
+
+> Si es el primer push de tu rama y te pide configurar upstream, acepta la opción sugerida para subir `qc/<tu_usuario>`.
+
+---
+
+### 8) Crear el Pull Request (PR)
+
+En GitHub:
+
+1. Entra al repositorio principal.
+2. Si aparece el aviso “`qc/<tu_usuario>` had recent pushes”, haz clic en **Compare & pull request**.  
+   (Si no aparece: ve a **Pull requests > New pull request**.)
+
+3. Configura:
+   - **Base:** `main`
+   - **Compare:** `qc/<tu_usuario>`
+
+4. En la descripción del PR pega y completa:
+
+**Descripción del PR**
+- Usuario: `<tu_usuario>`
+- Archivos entregados: `qc_<tu_usuario>.R`, `qc_<tu_usuario>.md/.qmd`, `<tu_usuario>_clean.csv`
+- Problemas encontrados:
+  - …
+- Cambios aplicados:
+  - …
+- Pendientes / decisiones:
+  - …
+- Reproducibilidad:
+  - Ejecutar `R/qc_<tu_usuario>.R`
+
+5. Haz clic en **Create pull request**.
+
+---
+
+### 9) Revisión y aprobación
+
+Yo revisaré tu PR con una lista de cotejo. Se aprobará si:
+
+- No modificaste el dataset crudo.
+- Incluiste los **3 archivos requeridos** con tu usuario.
+- Tu script corre y genera el output limpio.
+- Tu reporte explica claramente tus decisiones.
+
+---
+
+### Nota final
+
+Si aparece algún error (no aparece la pestaña Git, no deja hacer push, credenciales, etc.), **detente y levanta la mano**. Lo resolvemos en el momento.
+
+
+
 
 Prof. Edlin José Guerra Castro
