@@ -1,5 +1,30 @@
 ---
-title: "exploracion"
+title: "Exploraciona los datos Penguin Palmer"
+author: "Edlin Guerra"
 format: html
 ---
+
+# Reporte al control de calidad
+
+Procedí a verificar cuántos datos había por sitio de estudio. Luego procesí a verificar los nombres de las especies. 
+
+```{r}
+#| echo: false
+#| code-fold: true
+#| message: false
+  
+library(tidyverse)
+
+datos_crudos <- read_csv(file = "../datos/original/datos.csv")
+
+datos_crudos|>
+  group_by(studyName)|>
+  summarise(total = n())|>
+  ggplot(aes(x = studyName, y = total))+
+  geom_col()
+
+
+
+
+```
 
