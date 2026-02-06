@@ -1,0 +1,20 @@
+---
+title: "ReportsQC_Emilia1401"
+format: html
+---
+
+-   Principales problemas detectados
+
+-   CAMBIOS APLICADOS: Solo se aplico al momento de homogeneizar los nombres de las especies, debido a que en la tabla de los datos originales habian inconsistencias en la escritura, no siendo la correcta, de las 3 especies muestreadas en el estudio. Al hacer la revision se encontraron 6 formas distintas de como estaban escritos los nombre por lo que procedi a estandarizar con ayuda del comando "regex".
+
+    ```{r}
+
+    ```
+
+```{r}
+
+```
+
+```{r}
+
+```
