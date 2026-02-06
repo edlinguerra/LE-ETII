@@ -1,0 +1,118 @@
+---
+title: "Reporte: Control de Calidad de datos ecologicos"
+Alumna: Chable Euan Emilia Salethy
+format: html
+---
+
+-   PRINCIPALES PROBLEMAS DETECTADOS: Se localizaron principalmente en la escritura de los nombres comunes y cientificos de las especies.
+
+-   CAMBIOS APLICADOS: Solo se realizo al momento de homogeneizar los nombres de las especies, debido a que en la tabla de los datos originales habian inconsistencias en la escritura, no siendo la correcta, de las 3 especies muestreadas en el estudio. Al hacer la revision se encontraron 6 formas distintas de como estaban escritos los nombre por lo que procedi a estandarizar con ayuda del comando "regex".
+
+    ```{# PARTE 3_HOMOGENEIZAR NOMBRE DE ESPECIES}
+
+    # Corrección y limpieza 
+    datos_limpios_Homogenizados <- datos_crudos %>%
+      mutate(Species = case_when(
+        str_detect(Species, regex("Adeli", ignore_case = TRUE)) ~ "Adelie penguin (Pygoscelis adeliae)",
+        str_detect(Species, regex("Chinstrap", ignore_case = TRUE)) ~ "Chinstrap penguin (Pygoscelis antarctica)",
+        str_detect(Species, regex("Gento", ignore_case = TRUE)) ~ "Gentoo penguin (Pygoscelis papua)",
+        TRUE ~ Species
+      ))
+
+    #VERIFICAR DATOS
+    unique(datos_limpios_Homogenizados$Species)
+    ```
+
+-   SIN CORRECCION, ¿POR QUE?: Para indagar cuantos NA existen, utilice "pipe (%\>%)" para agrupar multiples comandos/funciones y poder saber cuantas veces aparece un valor nulo y en que columnas. A su vez, para el conteo total de NA's por columna me apoye de la funcion "pivot_longer" que pasa mi tabla de un formato ancho (multiples columnas) a un formato largo (mas filas), lo que facilita la lectura de datos.
+
+    ```{# PARTE 2_Valores de NA: CUANTOS, DONDE Y QUE HACER}
+
+    # Contar valores faltantes por columna
+    Valores_na <- datos_crudos %>%
+      summarise(across(everything(), ~sum(is.na(.))))
+
+    print(Valores_na)
+
+    # Conteo de NAs por columna
+    NA_por_columna <- datos_crudos %>%   
+      summarise(across(everything(), ~sum(is.na(.x)))) %>%
+      pivot_longer(everything(), names_to = "Columna", values_to = "Cantidad_NAs") %>%
+      filter(Cantidad_NAs > 0) # Solo mostrar las que tienen faltantes
+
+    # Mostrar resultados
+    print(NA_por_columna)
+    ```
+
+    Tome la desicion de mantener los NA's porque su impacto es mínimo en las variables numéricas (solo 2 datos faltantes de 344), mientras que eliminarlos por variables con más vacíos, como el sexo (11) o los isotopos (14 y 13), causaría una pérdida innecesaria de información en columnas que sí están completas; de esta manera, nos asegurariamos que el análisis de una variable no se vea afectado por la falta de datos en otra.
+
+    | Columna             | Cantidad NA's |
+    |---------------------|---------------|
+    | Culmen Length (mm)  | 2             |
+    | Culmen Depth (mm)   | 2             |
+    | Flipper Length (mm) | 2             |
+    | Body Mass (g)       | 2             |
+    | Sex                 | 11            |
+    | Delta 15 N (o/oo)   | 14            |
+    | Delta 13 C (o/oo)   | 13            |
+    | Comments            | 290           |
+
+-   SIN CORRECCION: Tampoco modifique la columna de "Year", puesto que la instruccion nos pedia agregar una nueva columna para llamarla "Year" basandonos de la columna "Date Egg"... pero el archivo original ya contaba con ese cambio.
+
+-   COMO REPRODUCIR MI RESULTADOS
+
+    ```{# paquetes}
+    library(tidyverse)
+
+    datos_crudos <- read_csv(file = "datos/original/datos.csv")
+    datos_crudos
+
+    #Aplicacion QC con tidyverse 
+
+    #PARTE 1 _ Revisión de tipos de datos (numérico, fecha, texto/categorías)
+
+    glimpse(datos_crudos) #tipo de variable, no.filas, etc. 
+    Revision_datos <- datos_crudos %>% 
+      summarise(across(everything(), ~class(.x)[1])) %>%
+      pivot_longer(everything(), names_to = "Columna", values_to = "Tipo_de_Dato")
+
+    # Mostrar tabla
+    print(Revision_datos)
+
+    # PARTE 2 _ Valores de NA CUANTOS, DONDE Y QUE HACER
+
+    # 2. Contar valores faltantes por columna
+    Valores_na <- datos_crudos %>%
+      summarise(across(everything(), ~sum(is.na(.))))
+
+    print(Valores_na)
+
+    # Conteo de NAs por columna
+    NA_por_columna <- datos_crudos %>%   
+      summarise(across(everything(), ~sum(is.na(.x)))) %>%
+      pivot_longer(everything(), names_to = "Columna", values_to = "Cantidad_NAs") %>%
+      filter(Cantidad_NAs > 0) # Solo mostrar las que tienen faltantes
+
+    # Mostrar resultados
+    print(NA_por_columna)
+
+    # PARTE 3 _ Identificar nombres actuales
+    unique(datos_crudos$Species)
+
+    # HOMOGENEIZAR ESPECIES
+    # Corrección y limpieza  
+
+    datos_limpios_Homogenizados <- datos_crudos %>%
+      mutate(Species = case_when(
+        str_detect(Species, regex("Adeli", ignore_case = TRUE)) ~ "Adelie penguin (Pygoscelis adeliae)",
+        str_detect(Species, regex("Chinstrap", ignore_case = TRUE)) ~ "Chinstrap penguin (Pygoscelis antarctica)",
+        str_detect(Species, regex("Gento", ignore_case = TRUE)) ~ "Gentoo penguin (Pygoscelis papua)",
+        TRUE ~ Species
+      ))
+
+    #VERIFICAR DATOS
+    unique(datos_limpios_Homogenizados$Species)
+    glimpse(datos_limpios_Homogenizados)
+
+    #PASO 4 _ Guardar tu dataset limpio en:
+    write_csv(x = datos_limpios_Homogenizados, file = "datos/curados/datos_rESCE.csv") 
+    ```
