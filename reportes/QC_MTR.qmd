@@ -1,0 +1,88 @@
+---
+title: "QC_MTR"
+author: "Michelle Tejeda"
+format: html
+---
+
+Correcciones a la base de datos "palmerpenguins"
+
+Se encontraron errores dentro de la base de datos "palmerpenguins", los principales problemas detectados fueron:
+1. Nombres de especies y científicos escritos erroneamente.
+2. Columnas sobrantes para el procesamiento de los datos.
+3. Individuos sin datos (NA).
+
+Las correcciones/cambios aplicados a cada error fueron los siguientes:
+1. Nombres de especies y científicos escritos erroneamente:
+En este caso; 
+- Los nombres de las especies se estandarizaron para que estuvieran en minúsculas a excepción de la primera letra del primer nombre, sin espacios extras al inicio y se corrigieron errores de escritura, donde se agregaron  letras. 
+- Los nombres científicos se estandarizaron para que cumplieran las reglas de nomenclatura científica. todas las letras en minúsculas, a excepción de la primera letra del género.
+Ejemplo: 
+ADELI PENGUIN (PYGOSCELIS ADELIAE) -> INCORRECTO
+Adelie penguin (Pygoscelis adeliae) -> CORREGIDO
+
+2. Columnas sobrantes para el procesamiento de los datos:
+Se decidió eliminar la columna "Comments" debido a que no era relevante para los análisis posteriores y contenía un alto porcentaje de valores faltantes (NA).
+
+3. Individuos sin datos (NA).
+Entre los datos recolectados se detectaron algunos individuos sin información, por lo que se decidió eliminar las filas con valores faltantes únicamente en columnas con mediciones morfométricas.
+Al eliminar las filas con NA la base de datos se redujo a 342 individuos muestreados.
+
+La base de datos no presentó ningún otro error para corregir, por lo que la demás información se dejó intacta.
+
+A continuación se adjunta el código con el que se limpió la base de datos para poder replicar el mismo resultado:
+```{r}
+#### CORRECCIÓN DE BASE DE DATOS####
+#paquete para esta tarea es principalmente tidyverse
+install.packages("tidyverse")
+library(tidyverse)
+
+####REVISIÓN/LECTURA DE DATOS####
+#Leer los datos desde el archivo crudo SIN editarlo (se hace una revisión
+#de los tipos de datos):
+datos_og<-read_csv("datos/original/datos.csv")
+
+view(datos_og)
+
+glimpse(datos_og)
+#en este caso, los datos se dividen en:
+#db1/int (números)
+#chr (texto)
+#date (fechas)
+
+#Revisión de nombres para cada especie
+datos_og |> 
+  group_by(Species) |> 
+  summarise(conteo = n())
+
+#Revisión de "NA" dentro de la base de datos
+colSums(is.na(datos_og))
+
+####CONTROL DE CALIDAD A LA BASE DE DATOS####
+#Homogeneización de nombres científicos
+datos_og <- datos_og |> 
+  mutate(Species = case_match(Species,
+        "Adeli penguin (pygoscelis adeliae)" ~ "Adelie penguin (Pygoscelis adeliae)",
+        "Adelie penguin (pygoscelis adeliae)" ~ "Adelie penguin (Pygoscelis adeliae)",
+        "Gento penguin (pygoscelis papua)"  ~ "Gentoo penguin (Pygoscelis papua)",
+        "Gentoo penguin (pygoscelis papua)"  ~ "Gentoo penguin (Pygoscelis papua)",
+        "Chinstrap penguin (pygoscelis antarctica)"   ~ "Chinstrap penguin (Pygoscelis antarctica)",
+        .default = Species                    
+  ))
+
+
+#Descartar valores faltantes (NA)
+#Descartar columna de comentarios (Comments)
+datos_og <- datos_og |> 
+  select(-Comments)
+
+#Descartar filas (individuos) con valores faltantes UNICAMENTE en columnas 
+#con mediciones morfológicas
+datos_og <- datos_og |> 
+  drop_na(`Culmen Length (mm)`, `Culmen Depth (mm)`, 
+          `Flipper Length (mm)`, `Body Mass (g)`)
+
+####GUARDAR LA BASE DE DATOS LIMPIA####
+write_csv(x=datos_og, file= "datos/curados/datos_rMTR.csv")
+
+```
+
