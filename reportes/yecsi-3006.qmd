@@ -1,0 +1,98 @@
+---
+title: "Reporte de control de calidad y exploración de bases de datos ecológicas"
+format: html
+---
+
+# **Reporte de control de calidad**
+
+El archivo cuenta con variables tanto númericas, como descriptivas, contiene fechas, medidas morfométricas, y categorías.
+
+[Tabla de los tipos de variable encontradas en el archivo]{.underline}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(tidyverse)
+library(stringr)
+library(dplyr)
+datos_crudos <- read_csv("../datos/original/datos.csv")
+ show_col_types = FALSE
+ 
+datos_crudos <- datos_crudos |>
+  select(-...1)
+
+Datos_revisados <- datos_crudos %>% 
+  summarise(across(everything(), ~class(.x)[1])) %>%
+  pivot_longer(everything(), names_to = "Columna", values_to = "Tipo_de_Variable")
+
+knitr::kable(Datos_revisados, caption = "Tipos de variables encontradas en el archivo")
+
+```
+
+-   **Principales problemas detectados:** El nombre de las especies se encontraba escrito de manera incorrecta en un par de ocasiones, de igual manera habían individuos sin registro (NA) como el caso de la variable *sex*, variables morfométricas y la columna de *comments.*
+
+-   **Cambios aplicados:** Se aplicó una homogenización a los nombres, se corrigió los que se encontraban escritos incorrectamente y se añadieron al grupo de especie correspondiente, estandarizando todos los nombres en minúscula. También se agregó una columna de la variable *sex (sex clean)* la cual cambió los NA por *uknow* para no crear sesgos en el proceso.
+
+[Tabla de nombre de especies sin corregir]{.underline}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+tabla_especies <- datos_crudos |>
+  group_by(Species) |>
+  summarise(n = n())
+
+knitr::kable(
+  tabla_especies,
+  col.names = c("Especie", "Número de registros"),
+  caption = "Resumen de especies antes de la homogenización"
+)
+
+```
+
+[Tabla de nombre de especies después de corregir]{.underline}
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(stringr)
+library(lubridate)
+
+# leer datos originales
+datos_crudos <- read_csv("../datos/original/datos.csv")
+
+# limpieza básica
+datos_limpios <- datos_crudos |>
+  mutate(
+    Sex_clean = if_else(is.na(Sex), "unknown", Sex),
+    Species = tolower(Species),
+    Species = str_squish(Species),
+    Species = case_when(
+      str_detect(Species, "adel")   ~ "adelie penguin (pygoscelis adeliae)",
+      str_detect(Species, "chin")   ~ "chinstrap penguin (pygoscelis antarctica)",
+      str_detect(Species, "gentoo|gento") ~ "gentoo penguin (pygoscelis papua)",
+      TRUE ~ Species
+    ),
+    Year = year(`Date Egg`)
+  )
+# resultado de homogenizar nombres
+tabla_especies <- datos_limpios |>
+  group_by(Species) |>
+  summarise(n = n())
+
+knitr::kable(
+  tabla_especies,
+  col.names = c("Especie", "Número de registros"),
+  caption = "Resumen de especies después de la homogenización"
+)
+```
+
+-   **Sin corregir:** No se eliminaron los NA de las diferentes variables, ya que no se desea tener sesgos por muestreos faltantes, tanto para la columna de *comments*, la cual no intervenía en los datos, tratándose de una variable completamente descriptiva.
+
+-   **Cómo reproducir tu resultado:**
+
+    -   Descargar el repositorio completo del proyecto.
+
+    -   Verificar que los datos originales se encuentren en la ruta de *datos/original/datos.csv*
+
+    -   Ejecutar el script que se encuentra en *codigos/yecsi-3006.R* desde R studio.
+
+    -   El script genera automáticamente el archivo limpio en: *datos/curados/datos_rYSSP.csv*
+
+    -   El reporte puede reproducirse ejecutando el archivo *reportes/yecsi-3006.qmd*
