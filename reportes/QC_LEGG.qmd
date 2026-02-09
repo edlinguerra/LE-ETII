@@ -1,0 +1,8 @@
+---
+title: "QC_LEGG"
+format: html
+---
+
+#Exploracion de los errores en el documento
+
+Cheque los datos del documento con el tidyverse, al checar los nombres, los corregi y despues busque los Na, de ahi los cheque los cuales eran el 5.1% luego de decidir que hacer con ellos checar que no eran demasiados, obte por borrarlos , en el caso de la variable sex, decidi cambiar los Na a indefinidos, despues separe la columna a año, cheque si habia otro que corregir , al ver que no lo pase a csv. 
