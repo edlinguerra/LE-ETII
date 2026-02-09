@@ -1,0 +1,45 @@
+---
+title: "**Exploración**"
+author: "Emilio Alejandro Jiménez Ibarra"
+date: "02/09/2026"
+format: html
+engine: knitr
+---
+
+-   Primero, se realizó una exploración básica del archivo con el siguiente código:
+
+    `{glimpse(datos_crudos)}`
+
+    Seguidamente se buscó identificar posibles valores NA en cada una de las variables usando:
+
+`{map_dbl(datos_crudos, ~sum(is.na(.)))}`
+
+-   Se identificaron múltiples NA en las siguientes variables: Culmen Length (2), Culmen depth (2), Flipper length (2), Body  Mass (2), Sex (11), Delta 15 N (14), Delta 13 C (14), Comments (290). Una vez confirmada la prescencia de valores NA, el siguiente código desglosó información del dataset más detalladamente:
+
+    ```{resumen_variables <- datos_crudos %>%}
+      summarise(across(everything(),
+                       list(
+                         Tipo = ~class(.)[1],
+                         N_Observaciones = ~n(),
+                         No_NA = ~sum(!is.na(.)),
+                         NA_count = ~sum(is.na(.)),
+                         Porcentaje_NA = ~round(mean(is.na(.)) * 100, 2),
+                         Valores_Unicos = ~n_distinct(., na.rm = TRUE)
+                       ))) %>%
+      pivot_longer(everything(),
+                   names_to = c("Variable", ".value"),
+                   names_sep = "_")
+    }
+    ```
+
+-   Otras observaciones derivadas del análisis: Se identificaron 6 valores para la variable especie, dado que solo se estudiaron 3 especies de pingüino, se asume que esto es un error. Asimismo también se identificó el mismo error en la variable Sex con 4 valores registrados para una variable con solo tres posibles valores, incluyendo la ausencia de valor (NA). Las correcciones hechas fueron las siguientes:
+
+-   Se eliminaron las observaciones con más de 2 NAs, con el objetivo de evitar que la falta de datos pueda insertar ruido en los análisis que vayan a realizarse.
+
+-   Se homogeneizaron los valores alternativos de las variables Sex y Species, se asumieron los siguientes valore en el dataset como los valores correctos ( "MALE", "FEMALE", "Chinstrap penguin (Pygoscelis antarctica)", "Adelie Penguin (Pygoscelis adeliae)", "Gentoo penguin (Pygoscelis papua)" y "NA" para las observaciones de Sex si su cantidad era \<= 2)
+
+-   Los valores NO corregidos correspondieron a las variables con presencia de 2 o menos NAs (exceptuando la variable de Comments), esto con el objetivo de conservar el resto de los datos.
+
+-   Los resultados obtenidos en el csv curado pueden replicarse con el script proporcionado y aplicando los criterios detallados anteriormente de forma conjunta.
+
+    ------------------------------------------------------------------------
