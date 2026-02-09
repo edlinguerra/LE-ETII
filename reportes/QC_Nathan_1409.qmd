@@ -1,0 +1,13 @@
+---
+title: "QC_Nathan_1409"
+format: html
+---
+Problema: La base contenía columnas con tipos de datos mezclados.Existían valores faltantes (NA). Los nombres de especies estaban escritos de forma heterogénea.
+
+Cambio: Se revisó la estructura y se corrigieron los tipos de datos, Se decidió eliminar las filas incompletas. Se creó una nueva columna anio a partir de la columna fecha. Se generó un gráfico de barras con ggplot2 para visualizar el número de registros por año
+
+No corregido: No se modificaron columnas que no eran relevantes para el análisis (ej. metadatos administrativos), ya que no afectaban directamente la calidad de los datos ecológicos.
+
+Reproducibilidad:
+
+El flujo completo está documentado en un script de R con tidyverse. Los pasos se pueden reproducir ejecutando el script en RStudio con la misma base de datos.
