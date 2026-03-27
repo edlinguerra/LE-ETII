@@ -1,0 +1,37 @@
+---
+title: "exploracion"
+format: html
+---
+## Resumen
+
+En este documento describo brevemente los problemas encontrados en el archivo `datos.csv` y cómo las arreglé usando R.
+
+### Problemas detectados y qué hice
+
+* **Nombres de especies escritos de muchas formas:**
+    * *El problema:* Noté que la misma especie aparecía escrita diferente (ej. "Adeli", "Adelie", "ADELIE PENGUIN"). Esto es malo porque R pensaría que son especies distintas.
+    * *La solución:* Usé funciones de texto para detectar las palabras clave (como "Adeli") y reescribir todo con el nombre científico correcto y estandarizado.
+
+* **Las fechas eran solo texto:**
+    * *El problema:* La columna `Date Egg` venía como texto, así que no se podía ordenar cronológicamente ni filtrar bien.
+    * *La solución:* Convertí la columna a formato de fecha real y aproveché para crear una columna nueva solo con el año (`Year_New`), como se pidió.
+
+* **Datos vacíos (NAs) en medidas:**
+    * *El problema:* Encontré un par de filas donde los pingüinos no tenían dato de peso ni largo de aleta.
+    * *La solución:* Decidí borrar esas filas específicas.
+    * *Por qué:* Si no tenemos las medidas del cuerpo, esos registros no nos sirven para los análisis estadísticos o gráficas que haremos después.
+
+### Lo que decidí NO borrar
+
+* **Pingüinos sin sexo identificado:**
+    * Hay algunos registros donde dice `NA` en la columna `Sex`.
+    * *Por qué los dejé:* Aunque no sepamos si son machos o hembras, sí tienen datos de peso y tamaño. Esa información todavía es útil para ver promedios generales, así que decidí no perder esos datos.
+
+### Cómo reproducir esto
+
+Si quieres obtener el mismo archivo limpio que yo:
+
+1.  Abre este proyecto en RStudio.
+2.  Asegúrate de que el archivo original `datos.csv` esté en la carpeta principal.
+3.  Corre mi script que está en `codigos/QC_<tu_usuario>.R`.
+4.  El archivo listo aparecerá automáticamente en la carpeta `datos/curados`.
